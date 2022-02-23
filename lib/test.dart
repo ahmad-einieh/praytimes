@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:intl/intl.dart';
 
 main() async {
   /*String url = "https://api.pray.zone/v2/times/today.json?city=riyadh-sa&school=4&timeformat=1&key=MagicKey&juristic=1";
@@ -18,11 +17,16 @@ main() async {
   var res = jsonDecode((await get(Uri.parse(url))).body);
 
   //var tt = int.parse(res['data']['timings']['Fajr']);
+  print(res.runtimeType);
   print(res);
+  print(res['data'].runtimeType);
+  
   print(res['data']['date']);
   print(res['data']['date']['gregorian']);
   print(res['data']['meta']);
-  print(res['data']['timings']);
+  print(res['data']['meta']['method']['name']);
+  print(res['data']['timings'].runtimeType);
+  print(res['data']['timings']['Fajr']);
 
   var time = "23:43";
   var temp = int.parse(time.split(':')[0]);
