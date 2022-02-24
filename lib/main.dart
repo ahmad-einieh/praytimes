@@ -1,9 +1,12 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 import 'helper.dart';
 import 'Data.dart';
+import 'menu_page.dart';
+import 'menu_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,45 +39,54 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("pray times"),),
-      body: Center(
-        child: ListView(
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            Center(
-              child: FutureBuilder<Data>(
-                future: futureData,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text('${snapshot.data!.nameOfMethod}');
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  return const CircularProgressIndicator();
-                },),
+    return ZoomDrawer(
+      style:DrawerStyle.DefaultStyle ,
+        menuScreen: MenuPage(),
+        mainScreen: Scaffold(
+
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text("pray times"),
+            leading: MenuWidget(),
+          ),
+          body: Center(
+            child: ListView(
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Center(
+                  child: FutureBuilder<Data>(
+                    future: futureData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text('${snapshot.data!.nameOfMethod}');
+                      } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      }
+                      return const CircularProgressIndicator();
+                    },
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Imsak'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Fajr'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Sunrise'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Dhuhr'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Asr'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Sunset'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Maghrib'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Isha'),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                timeMethod(futureData, 'Midnight'),
+              ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Imsak'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Fajr'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Sunrise'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Dhuhr'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Asr'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Sunset'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Maghrib'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Isha'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            timeMethod(futureData, 'Midnight'),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
