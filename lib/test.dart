@@ -13,20 +13,23 @@ main() async {
   print(y['results']['datetime'][0]['times']);
   print(y2['results']['datetime'][0]['times']);*/
   String url =
-      "https://api.aladhan.com/v1/timingsByCity?city=Riyadh&country=Saudi%20Arabia&method=4";
+      "http://api.aladhan.com/v1/calendar?latitude=37.421998333333335&longitude=-122.084&method=2&month=4&year=2017";/* String url =
+      "https://api.aladhan.com/v1/timingsByCity?city=Riyadh&country=Saudi%20Arabia&method=4";*/
   var res = jsonDecode((await get(Uri.parse(url))).body);
 
   //var tt = int.parse(res['data']['timings']['Fajr']);
-  print(res.runtimeType);
+
   print(res);
-  print(res['data'].runtimeType);
+  print(res['data']);
+  print(res['data'][0]['timings']);
+
   
-  print(res['data']['date']);
+ /* print(res['data']['date']);
   print(res['data']['date']['gregorian']);
   print(res['data']['meta']);
   print(res['data']['meta']['method']['name']);
   print(res['data']['timings'].runtimeType);
-  print(res['data']['timings']['Fajr']);
+  print(res['data']['timings']['Fajr']);*/
 
   var time = "23:43";
   var temp = int.parse(time.split(':')[0]);

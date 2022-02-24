@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helper.dart';
 import 'Data.dart';
@@ -29,12 +30,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  double? x;
+  double? y;
+
+  getData() async {
+    final prefs = await SharedPreferences.getInstance();
+    x = prefs.getDouble('x');
+    y = prefs.getDouble('y');
+
+  }
+
+
   late Future<Data> futureData;
 
   @override
   void initState() {
     super.initState();
     futureData = fetchData();
+    getData();
   }
 
   @override
@@ -84,6 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 timeMethod(futureData, 'Isha'),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 timeMethod(futureData, 'Midnight'),
+                /*Text('$x'),
+                Text('$y'),*/
               ],
             ),
           ),

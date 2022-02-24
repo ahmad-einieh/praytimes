@@ -1,23 +1,30 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:praytimes/City_Data.dart';
 import 'package:praytimes/Country_Data.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Picker extends StatefulWidget {
+  const Picker({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _Picker();
 }
 
 class _Picker extends State<Picker> {
+
+  late Position position;
+
   late Future<CountryData> futureCountryData;
   late Future<CityData> futureCityData;
 
   String countryValue = "";
-  String stateValue = "";
   String cityValue = "";
-  String address = "";
 
   List<String> coutries = [];
   List<String> cities = [];
@@ -69,7 +76,6 @@ class _Picker extends State<Picker> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     futureCountryData = fetchCountryData();
   }
@@ -80,7 +86,7 @@ class _Picker extends State<Picker> {
       body: SafeArea(
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 600,
             child: ListView(
               children: [
@@ -88,27 +94,59 @@ class _Picker extends State<Picker> {
                     items: coutries
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
-                    onChanged: (val) {
-                      print(val);
+                    onChanged: (val) async {
+                      if (kDebugMode) {
+                        print(val);
+                      }
                       setState(() {
                         countyname = val as String;
+
                       });
+
                       futureCityData = fetchCityData();
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString('country', countyname);
+
                     }),
                 countyname.isEmpty
                     ? Container()
-                    : DropdownButton(
-                        items: cities
-                            .map((e) =>
-                                DropdownMenuItem(value: e, child: Text(e)))
-                            .toList(),
-                        onChanged: (val) {
-                          print(val);
-                          setState(() {
-                            cityname = val as String;
-                          });
-                          print(cityname.runtimeType);
-                        }),
+                    : Center(
+                        child: DropdownButton(
+                            items: cities
+                                .map((e) =>
+                                    DropdownMenuItem(value: e, child: Text(e)))
+                                .toList(),
+                            onChanged: (val) async {
+                              if (kDebugMode) {
+                                print(val);
+                              }
+                              setState(() {
+                                cityname = val as String;
+                              });
+                              final prefs = await SharedPreferences.getInstance();
+                              prefs.setString('city', cityname);
+
+                            }),
+                      ),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await Permission.location.request();
+                      await Permission.locationAlways.request();
+                      await Permission.locationWhenInUse.request();
+                    } catch (e) {}
+
+                    position = await Geolocator.getCurrentPosition(
+                        desiredAccuracy: LocationAccuracy.high);
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setDouble('x', position.latitude);
+                    await prefs.setDouble('y',position.longitude);
+                    if (kDebugMode) {
+                      print(position);
+                    }
+                  },
+                  child: const Text("get location"),
+                ),
               ],
             ),
           ),
