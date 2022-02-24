@@ -44,67 +44,39 @@ Future<Data> fetchData() async {
 
 
 
-timeMethod(Future<Data> futureData, String pray) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      Text(pray),
-      FutureBuilder<Data>(
-        future: futureData,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text('${convertTime(snapshot.data!.data['timings'][pray])}');
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return const CircularProgressIndicator();
-        },
+timeMethod(Future<Data> futureData, String pray,context) {
+  return SizedBox(
+    width: 50,
+    child: Container(
+      height: 65,
+      decoration:  BoxDecoration(
+        color: Colors.green.shade200,
+        border: Border.all(
+          color: Colors.green,
+        ),
+          borderRadius: BorderRadius.all(Radius.circular(20))
       ),
-    ],
-  );
-}
-
-/*
-method2(){
-  return Scaffold(
-    drawer: Drawer(),
-    appBar: AppBar(title: const Text("pray times"),),
-    body: Center(
-      child: ListView(
+      //color: Colors.green,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          Center(
-            child: FutureBuilder<Data>(
-              future: futureData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text('${snapshot.data!.nameOfMethod}');
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                return const CircularProgressIndicator();
-              },),
+          Text(pray),
+          FutureBuilder<Data>(
+            future: futureData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text('${convertTime(snapshot.data!.data['timings'][pray])}');
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              return const CircularProgressIndicator();
+            },
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Imsak'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Fajr'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Sunrise'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Dhuhr'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Asr'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Sunset'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Maghrib'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Isha'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          timeMethod(futureData, 'Midnight'),
         ],
       ),
     ),
   );
-}*/
+}
+
+

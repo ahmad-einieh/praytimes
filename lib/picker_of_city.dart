@@ -4,8 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:praytimes/City_Data.dart';
-import 'package:praytimes/Country_Data.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,19 +16,12 @@ class Picker extends StatefulWidget {
 }
 
 class _Picker extends State<Picker> {
-
   late Position position;
-
-  late Future<CountryData> futureCountryData;
-  late Future<CityData> futureCityData;
-
-  String countryValue = "";
-  String cityValue = "";
 
   List<String> coutries = [];
   List<String> cities = [];
 
-  Future<CountryData> fetchCountryData() async {
+  fetchCountryData() async {
     final response = await http.get(
         Uri.parse('https://countriesnow.space/api/v0.1/countries/positions'));
     if (response.statusCode == 200) {
@@ -40,7 +32,6 @@ class _Picker extends State<Picker> {
           coutries.add(y['name']);
         });
       }
-      return CountryData.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load album');
     }
@@ -49,16 +40,16 @@ class _Picker extends State<Picker> {
   String countyname = '';
   String cityname = '';
 
-  Future<CityData> fetchCityData() async {
+  fetchCityData(String val) async {
     final response = await http.post(
         Uri.parse('https://countriesnow.space/api/v0.1/countries/cities'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'country': countyname,
+          'country': val,
         }));
-    if (response.statusCode == 200) {
+    try {
       var res = jsonDecode(response.body);
       setState(() {
         cities.clear();
@@ -68,16 +59,15 @@ class _Picker extends State<Picker> {
           cities.add(y);
         });
       }
-      return CityData.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load album');
+    } catch (e) {
+      print(e);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    futureCountryData = fetchCountryData();
+    fetchCountryData();
   }
 
   @override
@@ -98,15 +88,12 @@ class _Picker extends State<Picker> {
                       if (kDebugMode) {
                         print(val);
                       }
+                      fetchCityData(val as String);
                       setState(() {
                         countyname = val as String;
-
                       });
-
-                      futureCityData = fetchCityData();
                       final prefs = await SharedPreferences.getInstance();
                       prefs.setString('country', countyname);
-
                     }),
                 countyname.isEmpty
                     ? Container()
@@ -123,9 +110,9 @@ class _Picker extends State<Picker> {
                               setState(() {
                                 cityname = val as String;
                               });
-                              final prefs = await SharedPreferences.getInstance();
+                              final prefs =
+                                  await SharedPreferences.getInstance();
                               prefs.setString('city', cityname);
-
                             }),
                       ),
                 ElevatedButton(
@@ -140,7 +127,7 @@ class _Picker extends State<Picker> {
                         desiredAccuracy: LocationAccuracy.high);
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.setDouble('x', position.latitude);
-                    await prefs.setDouble('y',position.longitude);
+                    await prefs.setDouble('y', position.longitude);
                     if (kDebugMode) {
                       print(position);
                     }

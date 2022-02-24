@@ -63,43 +63,48 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: MenuWidget(),
           ),
           body: Center(
-            child: ListView(
-              children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                Center(
-                  child: FutureBuilder<Data>(
-                    future: futureData,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text('${snapshot.data!.nameOfMethod}');
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      }
-                      return const CircularProgressIndicator();
-                    },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: ListView(
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  Center(
+                    child: FutureBuilder<Data>(
+                      future: futureData,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text('${snapshot.data!.nameOfMethod}');
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return const CircularProgressIndicator();
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Imsak'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Fajr'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Sunrise'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Dhuhr'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Asr'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Sunset'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Maghrib'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Isha'),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                timeMethod(futureData, 'Midnight'),
-                /*Text('$x'),
-                Text('$y'),*/
-              ],
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Imsak',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Fajr',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Sunrise',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Dhuhr',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Asr',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Sunset',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Maghrib',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Isha',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  timeMethod(futureData, 'Midnight',context),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+
+                  /*Text('$x'),
+                  Text('$y'),*/
+                ],
+              ),
             ),
           ),
         ));
